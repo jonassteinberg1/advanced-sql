@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  postgres-orders:
+    container_name: postgres-orders
+    image: postgres:14-alpine
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+      - POSTGRES_DB=orders
+    volumes:
+      - postgres_data_orders:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  postgres-returns:
+    container_name: postgres-returns
+    image: postgres:14-alpine
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+      - POSTGRES_DB=returns
+    volumes:
+      - postgres_data_returns:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data_orders:
+  postgres_data_returns:
+
