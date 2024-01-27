@@ -114,10 +114,12 @@ def main():
     products_data = generate_products_data(num_rows)
     insert_into_products(conn, products_data)
     create_order_details_table(conn)
-    order_details_data = generate_order_details_data(num_rows, (0, num_rows), (0, num_rows))
-    #insert_into_order_details(conn, order_details_data)
+    # (1, num + 1) because a) lazy and b) other tables won't
+    # have an id of 0 so order_details insert would fail
+    order_details_data = generate_order_details_data(num_rows, (1, num_rows + 1), (1, num_rows + 1))
+    insert_into_order_details(conn, order_details_data)
     conn.close()
-    print(f"Inserted {num_rows} rows into 'orders' table.")
+    print(f"Inserted {num_rows} rows into 'orders, products and order_details' tables.")
 
 if __name__ == "__main__":
     main()
